@@ -2,7 +2,7 @@
 
 `Hamal` is a tool for synchronizing images between two mirrored repositories.
 
-```shell
+```
  _   _                       _ 
 | | | | __ _ _ __ ___   __ _| |
 | |_| |/ _\ | '_ \ _ \ / _\ | |
