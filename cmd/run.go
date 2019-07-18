@@ -30,7 +30,7 @@ var runCmd = &cobra.Command{
 	Long: `For details, please see: https://github.com/sunny0826/hamal.git
 
 example:
-hamal run -r keking/test:2`,
+hamal run -r guoxudongdocker/drone-dingtalk:latest`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		output := viper.GetStringMapString("doutput")
