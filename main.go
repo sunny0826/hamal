@@ -18,5 +18,5 @@ package main
 import "github.com/sunny0826/hamal/cmd"
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }

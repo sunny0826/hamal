@@ -18,15 +18,15 @@ type (
 
 	// Build defines Docker build parameters.
 	Build struct {
-		Repo        string   // Docker repo:tag
+		Repo string // Docker repo:tag
 	}
 
 	// Plugin defines the Docker plugin parameters.
 	Plugin struct {
-		Login   Login  // Docker login configuration
-		Build   Build  // Docker build configuration
-		Dryrun  bool   // Docker push is skipped
-		Cleanup bool   // Docker purge is enabled
+		Login   Login // Docker login configuration
+		Build   Build // Docker build configuration
+		Dryrun  bool  // Docker push is skipped
+		Cleanup bool  // Docker purge is enabled
 	}
 )
 
@@ -93,6 +93,7 @@ func ExecCommand(cmds []*exec.Cmd) error {
 }
 
 const dockerExe = "/usr/local/bin/docker"
+
 //const dockerdExe = "/usr/local/bin/dockerd"
 
 // helper function to create the docker login command.

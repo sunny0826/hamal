@@ -17,9 +17,10 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
-	"os"
 
 	"github.com/spf13/viper"
 )
@@ -94,4 +95,3 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }
-
