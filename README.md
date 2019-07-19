@@ -38,17 +38,18 @@ Use "hamal [command] --help" for more information about a command.
 For details, please see: https://github.com/sunny0826/hamal.git
 
 example:
-hamal run -r guoxudongdocker/drone-dingtalk:latest
+hamal run -n drone-dingtalk:latest
 
 Usage:
   hamal run [flags]
 
 Flags:
-  -h, --help              help for run
-  -r, --repontag string   docker repo:tag
+  -h, --help          help for run
+  -n, --name string   docker name:tag
 
 Global Flags:
       --config string   config file (default is $HOME/.hamal/config.yaml)
+
 ```
 
 #### configuration file
@@ -56,15 +57,18 @@ Global Flags:
 `$HOME/.hamal/config.yaml`
 
 ```yaml
-author: Guo Xudong <sunnydog0826@gmail.com>
+author: <your-name>
 license: MIT
 dinput:
-  registry: <your-registry-input>
+#  registry: <your-registry-input>    # if used dockerhub ,do not need registry
+  repo: <your-repo-input>
   user: <your-user-input>
   pass: <your-pass-input>
+  isdockerhub: true                   # use dockerhub
 doutput:
-  registry: <your-registry-output>
+  registry: <your-registry-input>
+  repo: <your-repo-output>
   user: <your-user-output>
-  pass: <your-pass-output>
-
+  pass: <your-pass-input>
+  isdockerhub: false
 ```

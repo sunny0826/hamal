@@ -10,15 +10,17 @@ import (
 type (
 	// Login defines Docker login parameters.
 	Login struct {
-		Registry string // Docker registry address
-		Username string // Docker registry username
-		Password string // Docker registry password
-		Email    string // Docker registry email
+		Registry    string // Docker registry address
+		Username    string // Docker registry username
+		Password    string // Docker registry password
+		Email       string // Docker registry email
+		IsDockerhub bool   // DockerHub
 	}
 
 	// Build defines Docker build parameters.
 	Build struct {
-		Repo string // Docker repo:tag
+		Repo string // Docker repo
+		Name string // Docker name:tag
 	}
 
 	// Plugin defines the Docker plugin parameters.
@@ -30,54 +32,80 @@ type (
 	}
 )
 
-// pull docker images
+// Pull docker images
 func (p Plugin) Pull() (string, error) {
-	if p.Login.Password != "" {
+	var cmds []*exec.Cmd
+	//cmds = append(cmds, commandVersion()) // docker version
+	//cmds = append(cmds, commandInfo())    // docker info
+	var url string
+	if p.Login.IsDockerhub {
+		fmt.Println("Do not need Login.")
+		url = fmt.Sprintf("%s/%s", p.Build.Repo, p.Build.Name)
+	} else {
 		cmd := commandLogin(p.Login)
 		err := cmd.Run()
 		if err != nil {
 			return "", fmt.Errorf("Error authenticating: %s", err)
 		}
-	} else {
-		fmt.Println("Registry credentials not provided. Guest mode enabled.")
+		url = fmt.Sprintf("%s/%s/%s", p.Login.Registry, p.Build.Repo, p.Build.Name)
 	}
-	var cmds []*exec.Cmd
-	//cmds = append(cmds, commandVersion()) // docker version
-	//cmds = append(cmds, commandInfo())    // docker info
-	url := fmt.Sprintf("%s/%s", p.Login.Registry, p.Build.Repo)
+
 	cmds = append(cmds, commandPull(url))
 	// execute all commands in batch mode.
-	ExecCommand(cmds)
+	err := ExecCommand(cmds)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	return url, fmt.Errorf("Error pull")
 }
 
-// change tag and push images
+// ChangeTagAndPush : Change tag and push images
 func (p Plugin) ChangeTagAndPush(url string) (string, error) {
-	pushUrl := fmt.Sprintf("%s/%s", p.Login.Registry, p.Build.Repo)
+	var pushURL string
+	if p.Login.IsDockerhub {
+		fmt.Println("Do not need Login.")
+		pushURL = fmt.Sprintf("%s/%s", p.Build.Repo, p.Build.Name)
+	} else {
+		cmd := commandLogin(p.Login)
+		err := cmd.Run()
+		if err != nil {
+			return "", fmt.Errorf("Error authenticating: %s", err)
+		}
+		pushURL = fmt.Sprintf("%s/%s/%s", p.Login.Registry, p.Build.Repo, p.Build.Name)
+	}
 	var cmds []*exec.Cmd
 	// change tag
-	cmds = append(cmds, changeCommandTag(url, pushUrl)) // docker tag
+	cmds = append(cmds, changeCommandTag(url, pushURL)) // docker tag
 	// push image
-	cmds = append(cmds, changeCommandPush(pushUrl)) // docker tag
-	ExecCommand(cmds)
-	return pushUrl, fmt.Errorf("Error change tag or push image")
+	cmds = append(cmds, changeCommandPush(pushURL)) // docker tag
+	err := ExecCommand(cmds)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	return pushURL, fmt.Errorf("Error change tag or push image")
 }
 
-// remove image
-func (p Plugin) CleanImages(PullUrl string, PushUrl string) error {
+// CleanImages & Remove image
+func (p Plugin) CleanImages(PullURL string, PushURL string) error {
 	var cmds []*exec.Cmd
 	if p.Cleanup {
-		cmds = append(cmds, commandRmi(PullUrl)) // docker pull rmi
-		cmds = append(cmds, commandRmi(PushUrl)) // docker push rmi
+		cmds = append(cmds, commandRmi(PullURL)) // docker pull rmi
+		cmds = append(cmds, commandRmi(PushURL)) // docker push rmi
 		cmds = append(cmds, commandPrune())      // docker system prune -f
 	} else {
 		return fmt.Errorf("Cleanup is false")
 	}
-	ExecCommand(cmds)
+	err := ExecCommand(cmds)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	return nil
 }
 
-// batch run command
+// ExecCommand : Batch run command
 func ExecCommand(cmds []*exec.Cmd) error {
 	for _, cmd := range cmds {
 		cmd.Stdout = os.Stdout
@@ -138,9 +166,9 @@ func trace(cmd *exec.Cmd) {
 }
 
 // helper to check if args match "docker pull <image>"
-func isCommandPull(args []string) bool {
-	return len(args) > 2 && args[1] == "pull"
-}
+//func isCommandPull(args []string) bool {
+//	return len(args) > 2 && args[1] == "pull"
+//}
 
 func commandPull(repo string) *exec.Cmd {
 	return exec.Command(dockerExe, "pull", repo)
@@ -157,11 +185,11 @@ func commandLoginEmail(login Login) *exec.Cmd {
 }
 
 // helper function to create the docker info command.
-func commandVersion() *exec.Cmd {
-	return exec.Command(dockerExe, "version")
-}
+//func commandVersion() *exec.Cmd {
+//	return exec.Command(dockerExe, "version")
+//}
 
 // helper function to create the docker info command.
-func commandInfo() *exec.Cmd {
-	return exec.Command(dockerExe, "info")
-}
+//func commandInfo() *exec.Cmd {
+//	return exec.Command(dockerExe, "info")
+//}
