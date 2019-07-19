@@ -1,6 +1,7 @@
 # Hamal
 
 [![Build Status](https://travis-ci.org/sunny0826/hamal.svg?branch=master)](https://travis-ci.org/sunny0826/hamal)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sunny0826/hamal)](https://goreportcard.com/report/github.com/sunny0826/hamal)
 
 `Hamal` is a tool for synchronizing images between two mirrored repositories.
 
