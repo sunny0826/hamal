@@ -26,8 +26,6 @@ import (
 )
 
 var cfgFile string
-var author string
-var output map[string]string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -44,20 +42,6 @@ You can synchronize mirrors between two private image repositories.
 
 WARN:The docker must be installed locally.
 Currently only Linux and MacOS are supported.`,
-
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	Run: func(cmd *cobra.Command, args []string) {
-		//greeting := "Hello"
-		if viper.GetString("author") != "" {
-			author = viper.GetString("author")
-		}
-		if viper.GetStringMap("output") != nil {
-			output = viper.GetStringMapString("output")
-		}
-		fmt.Println(author)
-		fmt.Println(output)
-	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
