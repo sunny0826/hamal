@@ -20,12 +20,12 @@ WARN:The docker must be installed locally.
 Currently only Linux and MacOS are supported.
 
 Usage:
-  hamal [flags]
   hamal [command]
 
 Available Commands:
   help        Help about any command
   run         Start syncing mirror
+  version     Prints the huamal version
 
 Flags:
       --config string   config file (default is $HOME/.hamal/config.yaml)
