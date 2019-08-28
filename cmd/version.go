@@ -63,8 +63,8 @@ func (v version) Print(w io.Writer) {
 	fmt.Fprintf(w, "Version: %+v\n", v)
 }
 
-// CmdVersion represents the version command
-func CmdVersion(w io.Writer) *cobra.Command {
+// Version represents the version command
+func Version(w io.Writer) *cobra.Command {
 	return &cobra.Command{
 		Use:     "version",
 		Short:   "Prints the huamal version",
@@ -77,15 +77,5 @@ func CmdVersion(w io.Writer) *cobra.Command {
 
 func init() {
 	stdOut := os.Stdout
-	rootCmd.AddCommand(CmdVersion(stdOut))
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// versionCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// versionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(Version(stdOut))
 }
