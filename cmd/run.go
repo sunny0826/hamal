@@ -56,43 +56,29 @@ hamal run -n drone-dingtalk:latest -r drone-test:v1.0
 		hamalconfig := Config{}
 		hamalconfig.ReadYaml(cfgFile)
 
-		//output := viper.GetStringMapString("doutput")
-		//input := viper.GetStringMapString("dinput")
 		// 输出仓库
-		//outregistry := output["registry"]
-		//outrepo := output["repo"]
-
 		outregistry := hamalconfig.Doutput.Registry
 		outrepo := hamalconfig.Doutput.Repo
 		if outrepo == "" {
 			fmt.Println("Please enter the <doutput><repo> field in the configuration file(default is $HOME/.hamal/config)!")
 			os.Exit(1)
 		}
-		//outuser := output["user"]
-		//outpass := output["pass"]
-		//outhub, _ := strconv.ParseBool(output["isdockerhub"])
-
 		outuser := hamalconfig.Doutput.User
 		outpass := hamalconfig.Doutput.Pass
 		outhub := hamalconfig.Doutput.IsDockerHub
 
 		// 输入仓库
-		//inregistry := input["registry"]
-		//inrepo := input["repo"]
-
 		inregistry := hamalconfig.Dinput.Registry
 		inrepo := hamalconfig.Dinput.Repo
 		if inrepo == "" {
 			fmt.Println("Please enter the <dinput><repo> field in the configuration file(default is $HOME/.hamal/config)!")
 			os.Exit(1)
 		}
-		//inuser := input["user"]
-		//inpass := input["pass"]
-		//inhub, _ := strconv.ParseBool(input["isdockerhub"])
 		inuser := hamalconfig.Dinput.User
 		inpass := hamalconfig.Dinput.Pass
 		inhub := hamalconfig.Dinput.IsDockerHub
 
+		// 组合参数
 		inplugin := docker.Plugin{
 			Login: docker.Login{
 				Registry:    inregistry,
