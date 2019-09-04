@@ -95,7 +95,7 @@ hamal run -n drone-dingtalk:latest -r drone-test:v1.0
 
 		var outname string
 		if rename != "" {
-			fmt.Printf("rename <<%s>> to <<%s>>", name, rename)
+			fmt.Printf("rename <<%s>> to <<%s>>\n", name, rename)
 			outname = rename
 		} else {
 			outname = name
