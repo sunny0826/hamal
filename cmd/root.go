@@ -1,3 +1,5 @@
+package cmd
+
 /*
 Copyright © 2019 Guo Xudong
 
@@ -13,16 +15,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package cmd
 
 import (
+	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
-
-	"github.com/spf13/viper"
 )
 
 var cfgFile string
@@ -56,26 +57,34 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.hamal/config.yaml)")
+	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.hamal/config.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	home, err := homedir.Dir()
+	haconfig := flag.String("haconfig", filepath.Join(home, ".hamal", "config"), "(optional) absolute path to the haconfig file")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", *haconfig, "config.yaml file (default is $HOME/.hamal)")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	viper.AddConfigPath(home)
-	viper.SetConfigName(".hamal/config")
-	err = viper.ReadInConfig() // 搜索路径，并读取配置数据
-	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
-	viper.AutomaticEnv() // read in environment variables that match
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	//home, err := homedir.Dir()
+	//if err != nil {
+	//	fmt.Println(err)
+	//	os.Exit(1)
+	//}
+	//viper.AddConfigPath(home)
+	//viper.SetConfigName(".hamal/config")
+	//err = viper.ReadInConfig() // 搜索路径，并读取配置数据
+	//if err != nil {
+	//	panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	//}
+	//viper.AutomaticEnv() // read in environment variables that match
+	//
+	//// If a config file is found, read it in.
+	//if err := viper.ReadInConfig(); err == nil {
+	//	fmt.Println("Using config file:", viper.ConfigFileUsed())
+	//}
 }
