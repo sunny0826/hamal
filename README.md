@@ -1,3 +1,5 @@
+# This tool stores passwords explicitly and is not being maintained at the moment, so please use with caution.
+
 # Hamal
 
 [![Build Status](https://travis-ci.org/sunny0826/hamal.svg?branch=master)](https://travis-ci.org/sunny0826/hamal)
